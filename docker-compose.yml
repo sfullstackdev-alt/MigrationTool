@@ -1,0 +1,21 @@
+services:
+  migration-tool:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: migration-tool:local
+    container_name: migration-tool
+    environment:
+      - DOTNET_REPO_URL=${DOTNET_REPO_URL}
+      - DOTNET_REPO_BRANCH=${DOTNET_REPO_BRANCH}
+      - DOTNET_REPO_CLONE_ROOT=/repos
+      - DOTNET_BUILD_USE_CONTAINER=true
+      - DOTNET_BUILD_CONTAINER_IMAGE=mcr.microsoft.com/dotnet/sdk:8.0
+      - DOTNET_BUILD_CONTAINER_VOLUME=migrationtool-cloned-repos
+    volumes:
+      - cloned-repos:/repos
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  cloned-repos:
+    name: migrationtool-cloned-repos
